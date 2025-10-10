@@ -57,9 +57,52 @@
 | **Độ phức tạp phần cứng** | Cao (giải mã phức tạp, microcode) | Thấp hơn (giải mã đơn giản, logic gọn) |
 | **Ứng dụng thực tế** | x86 (Intel/AMD) - máy cá nhân, máy chủ, desktop | ARM (di động, nhúng), MIPS, SPARC, RISC-V - điện thoại, máy tính bảng, IoT |
 
-## 4. Kết luận
+## 4. Kiến trúc phù hợp cho hệ thống nhúng hiện nay
+
+Trong các hệ thống nhúng hiện đại, **kiến trúc RISC được sử dụng gần như hoàn toàn** do các ưu điểm vượt trội:
+
+### 4.1 Vi điều khiển RISC
+- **STM32** (ARM Cortex-M)
+- **S32K** (ARM Cortex-M4/M7) 
+- **ESP32** (Xtensa hoặc RISC-V)
+
+### 4.2 Máy tính nhúng RISC
+- **BeagleBone**: TI AM335x (Cortex-A8, ARMv7-A)
+- **Raspberry Pi**: Broadcom BCM283x với nhân Cortex-A53/A72/A76 (ARMv8-A)
+
+**Lợi ích của RISC trong hệ thống nhúng:**
+- Tiết kiệm năng lượng
+- Đơn giản hóa phần cứng
+- Dễ tích hợp
+- Phù hợp với yêu cầu thời gian thực
+- Hiệu suất cao, khả năng phản hồi nhanh
+- Chi phí thấp
+
+## 5. Ứng dụng thực tế của CISC trong hệ thống nhúng hiện nay
+
+Mặc dù RISC chiếm ưu thế, **kiến trúc CISC (x86, x86-64) vẫn được sử dụng** trong các hệ thống nhúng cao cấp:
+
+### 5.1 Các ứng dụng CISC trong nhúng
+- **Máy tính nhúng công nghiệp (Industrial PC)**
+  - CPU: Intel Atom, Core i3/i5/i7, AMD Ryzen Embedded
+  - HĐH: Windows Embedded, Linux, QNX
+  - Ứng dụng: Điều khiển dây chuyền, robot công nghiệp, hệ thống SCADA
+
+- **Máy tính nhúng AI Edge**
+  - Thiết bị: Intel NUC, Advantech ARK, OnLogic CL210
+  - Ứng dụng: Xử lý hình ảnh, thị giác máy, trí tuệ nhân tạo tại biên (Edge AI)
+
+- **Bộ điều khiển chuyên dụng**
+  - Thiết bị y tế, robot, hệ thống POS
+  - Yêu cầu: Khả năng xử lý mạnh, tương thích phần mềm thương mại
+
+### 5.2 Lý do chọn CISC trong nhúng
+- Hiệu năng tính toán mạnh
+- Khả năng tương thích phần mềm
+- Hỗ trợ hệ điều hành đầy đủ
+- Đa nhiệm hiệu quả
+
+## 6. Kết luận
 
 - **CISC**: Ưu thế giảm số lệnh, thuận tiện cho compiler, nhưng phức tạp phần cứng, khó tối ưu pipeline
 - **RISC**: Đơn giản hóa lệnh, dễ pipeline, hiệu suất cao, tiết kiệm năng lượng, nhưng cần compiler mạnh
-
-**Thực tế hiện nay**: Các kiến trúc thương mại (như x86) đã pha trộn kỹ thuật - giải mã lệnh CISC thành micro-ops kiểu RISC, nên ranh giới giữa hai kiến trúc không còn rõ rệt như trước.
