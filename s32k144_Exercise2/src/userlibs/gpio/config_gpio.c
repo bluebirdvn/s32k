@@ -1,9 +1,4 @@
-/*
- * config_gpio.c
- *
- *  Created on: Oct 25, 2025
- *      Author: Admin
- */
+
 
 
 /*

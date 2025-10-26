@@ -50,18 +50,114 @@
     #define __NO_RETURN
 #endif
 
-
-#define GPIO_PD_0 0u
-#define GPIO_PD_15 15u
-#define GPIO_PD_16 16u
-
-
+/* ----- Pin mapping ----- */
+#define LED_RED_PIN     (0u)    /* PTD0  */
+#define LED_GREEN_PIN   (15u)   /* PTD15 */
+#define LED_BLUE_PIN    (16u)   /* PTD16 */
 
 
-int main(void) {
+#define LED_HOLD_MS     (3000u)
 
 
-	return 0;
+
+static void delay_ms(uint32_t ms)
+{
+    volatile uint32_t k = 3000u;
+    while (ms--) {
+        for (volatile uint32_t i = 0; i < k; i++) {
+            __NOP();
+        }
+    }
+}
+
+static int board_leds_init(void)
+{
+    int rc;
+
+    rc = clock_enable_port((uint8_t)PCC_PORTD_INDEX);
+    if (rc != 0) return rc;
+
+    {
+        Port_Pin_Config_t pdef;
+
+        port_config_default(LED_RED_PIN, &pdef);
+        pdef.port_mux      = PORT_MUX_GPIO;
+        pdef.port_pulling  = PORT_PULL_DISABLED;
+        pdef.port_interrupt= PORT_INT_DISABLED;
+
+        /* PTD0 */
+        rc = port_init(&pdef, (uint8_t)LED_RED_PIN, PORTD);
+        if (rc != 0) return rc;
+
+        /* PTD15 */
+        rc = port_init(&pdef, (uint8_t)LED_GREEN_PIN, PORTD);
+        if (rc != 0) return rc;
+
+        /* PTD16 */
+        rc = port_init(&pdef, (uint8_t)LED_BLUE_PIN, PORTD);
+        if (rc != 0) return rc;
+    }
+
+    {
+        GPIO_config_t g;
+
+        /* PTD0 */
+        g.port = PORTD;
+        g.gpio = GPIOD;
+        g.pin = LED_RED_PIN;
+        g.direction = GPIO_OUTPUT;
+        rc = gpio_init(&g);
+        if (rc != 0) return rc;
+
+        /* PTD15 */
+        g.pin = LED_GREEN_PIN;
+        rc = gpio_init(&g);
+        if (rc != 0) return rc;
+
+        /* PTD16 */
+        g.pin = LED_BLUE_PIN;
+        rc = gpio_init(&g);
+        if (rc != 0) return rc;
+    }
+
+
+    gpio_set_ouput(GPIOD, LED_RED_PIN,   LED_OFF);
+    gpio_set_ouput(GPIOD, LED_GREEN_PIN, LED_OFF);
+    gpio_set_ouput(GPIOD, LED_BLUE_PIN,  LED_OFF);
+
+    return 0;
 }
 
 
+static inline void led_show(uint8_t r, uint8_t g, uint8_t b)
+{
+    gpio_set_ouput(GPIOD, LED_RED_PIN,   r);
+    gpio_set_ouput(GPIOD, LED_GREEN_PIN, g);
+    gpio_set_ouput(GPIOD, LED_BLUE_PIN,  b);
+}
+
+int main(void)
+{
+    (void)clock_init();
+
+    if (board_leds_init() != 0) {
+        for (;;) { __NOP(); }
+    }
+
+    for (;;)
+    {
+        /* Red 3s */
+        led_show(LED_ON,  LED_OFF, LED_OFF);
+        delay_ms(LED_HOLD_MS);
+
+        /* Green 3s */
+        led_show(LED_OFF, LED_ON,  LED_OFF);
+        delay_ms(LED_HOLD_MS);
+
+        /* Blue 3s */
+        led_show(LED_OFF, LED_OFF, LED_ON);
+        delay_ms(LED_HOLD_MS);
+    }
+
+    return 0;
+}
