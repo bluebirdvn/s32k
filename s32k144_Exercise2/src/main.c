@@ -121,9 +121,9 @@ static int board_leds_init(void)
     }
 
 
-    gpio_set_ouput(GPIOD, LED_RED_PIN,   LED_OFF);
-    gpio_set_ouput(GPIOD, LED_GREEN_PIN, LED_OFF);
-    gpio_set_ouput(GPIOD, LED_BLUE_PIN,  LED_OFF);
+    gpio_set_ouput(GPIOD, LED_RED_PIN,   GPIO_LOW);
+    gpio_set_ouput(GPIOD, LED_GREEN_PIN, GPIO_LOW);
+    gpio_set_ouput(GPIOD, LED_BLUE_PIN,  GPIO_LOW);
 
     return 0;
 }
@@ -147,15 +147,15 @@ int main(void)
     for (;;)
     {
         /* Red 3s */
-        led_show(LED_ON,  LED_OFF, LED_OFF);
+        led_show(GPIO_HIGH,  GPIO_LOW, GPIO_LOW);
         delay_ms(LED_HOLD_MS);
 
         /* Green 3s */
-        led_show(LED_OFF, LED_ON,  LED_OFF);
+        led_show(GPIO_LOW, GPIO_HIGH,  GPIO_LOW);
         delay_ms(LED_HOLD_MS);
 
         /* Blue 3s */
-        led_show(LED_OFF, LED_OFF, LED_ON);
+        led_show(GPIO_LOW, GPIO_LOW, GPIO_HIGH);
         delay_ms(LED_HOLD_MS);
     }
 
