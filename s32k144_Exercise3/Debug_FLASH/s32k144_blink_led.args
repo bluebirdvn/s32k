@@ -1,0 +1,16 @@
+-T
+"C:/Users/Admin/workspaceS32DS.3.6.3/s32k144_blink_led/Project_Settings/Linker_Files/S32K144_64_flash.ld"
+-Wl,-Map,"s32k144_blink_led.map"
+-Xlinker
+--gc-sections
+-n
+-mcpu=cortex-m4
+-specs=rdimon.specs
+"./Project_Settings/Startup_Code/startup.o"
+"./Project_Settings/Startup_Code/startup_S32K144.o"
+"./Project_Settings/Startup_Code/system_S32K144.o"
+"./src/main.o"
+"./src/userlibs/adc/config_adc.o"
+"./src/userlibs/clocks/config_clocks.o"
+"./src/userlibs/gpio/config_gpio.o"
+"./src/userlibs/port/config_port.o"
